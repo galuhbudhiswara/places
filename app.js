@@ -1,19 +1,19 @@
 let activeIndex = 0;
 const markers = {};
 
-const INDONESIA_BOUNDS = L.latLngBounds(
-  L.latLng(-11.5,  94.0),  // south-west
-  L.latLng(  6.5, 141.5)   // north-east
+const JAVA_BOUNDS = L.latLngBounds(
+  L.latLng(-8.8, 105.0),  // south-west
+  L.latLng(-5.8, 115.0)   // north-east
 );
 
 const map = L.map('map', {
-  center: [-2.5, 118.0],
-  zoom: 5,
-  minZoom: 5,               
-  maxZoom: 13,              
+  center: [-7.5, 110.0],
+  zoom: 7,
+  minZoom: 7,
+  maxZoom: 10,
   zoomControl: false,
-  maxBounds: INDONESIA_BOUNDS,
-  maxBoundsViscosity: 1.0,  
+  maxBounds: JAVA_BOUNDS,
+  maxBoundsViscosity: 1.0,
 });
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
