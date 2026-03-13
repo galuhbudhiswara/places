@@ -11,7 +11,7 @@ const map = L.map('map', {
   center: [-7.5, 110.0],
   zoom: 7,
   minZoom: 7,
-  maxZoom: 10,
+  maxZoom: 9,
   zoomControl: false,
   maxBounds: JAVA_BOUNDS,
   maxBoundsViscosity: 1.0,
@@ -125,8 +125,8 @@ function renderModal() {
 
   document.getElementById('modal-loc-text').textContent = place.location;
   document.getElementById('modal-title').textContent    = place.name;
-  document.getElementById('modal-date').textContent     = place.date;
-  document.getElementById('modal-note').textContent     = place.note ? `"${place.note}"` : '';
+  document.getElementById('modal-date').textContent     = place.date ? `${place.note}` : '';
+  document.getElementById('modal-note').textContent     = place.note ? `${place.note}` : '';
 
   document.getElementById('modal-counter').textContent =
     total > 1 ? `${activeMediaIndex + 1} / ${total}` : '';
