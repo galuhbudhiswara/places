@@ -107,6 +107,8 @@ function renderModal() {
     vid.muted    = false;
     vid.loop     = false;
     vid.setAttribute('playsinline', '');
+    vid.setAttribute('controlsList', 'nodownload');
+    vid.setAttribute('disablePictureInPicture', '');
     container.appendChild(vid);
   } else {
     const img = document.createElement('img');
