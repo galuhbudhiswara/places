@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <header>
     <div class="header-left">
       <span class="header-main">Places</span>
@@ -26,9 +27,11 @@
   <div id="modal-overlay">
     <div class="modal-card">
       <div class="modal-image">
-        <img id="modal-img" src="" alt="" />
+
+        <div id="media-container"></div>
+
         <div class="modal-image-overlay"></div>
-        <div class="modal-image-badge" id="modal-badge">Memory 1 of 5</div>
+        <div class="modal-image-badge" id="modal-badge"></div>
         <div class="modal-image-loc">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="white">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
@@ -36,6 +39,7 @@
           <span id="modal-loc-text"></span>
         </div>
       </div>
+
       <div class="modal-body">
         <div class="modal-title" id="modal-title"></div>
         <div class="modal-date"  id="modal-date"></div>
@@ -43,8 +47,8 @@
         <div class="modal-note"  id="modal-note"></div>
         <div class="modal-footer">
           <div class="modal-nav">
-            <button class="nav-btn" id="nav-prev" onclick="navigateModal(-1)">&#8249;</button>
-            <button class="nav-btn" id="nav-next" onclick="navigateModal(1)">&#8250;</button>
+            <button class="nav-btn" id="nav-prev" onclick="navigateMedia(-1)">&#8249;</button>
+            <button class="nav-btn" id="nav-next" onclick="navigateMedia(1)">&#8250;</button>
           </div>
           <span class="modal-counter" id="modal-counter"></span>
           <button class="modal-close-btn" onclick="closeModal()">Close &#x2715;</button>

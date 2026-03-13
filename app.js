@@ -1,9 +1,10 @@
-let activeIndex = 0;
+let activePlaceIndex = 0;
+let activeMediaIndex = 0;
 const markers = {};
 
 const JAVA_BOUNDS = L.latLngBounds(
-  L.latLng(-8.8, 105.0),  // south-west
-  L.latLng(-5.8, 115.0)   // north-east
+  L.latLng(-8.8, 105.0),
+  L.latLng(-5.8, 115.0)
 );
 
 const map = L.map('map', {
@@ -19,7 +20,7 @@ const map = L.map('map', {
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap',
   maxZoom: 13,
-  keepBuffer: 2,            
+  keepBuffer: 2,
 }).addTo(map);
 
 L.control.zoom({ position: 'topright' }).addTo(map);
@@ -81,36 +82,68 @@ places.forEach((place, i) => {
   legendEl.appendChild(el);
 });
 
-function openModal(i) {
-  activeIndex = i;
+function openModal(placeIndex) {
+  activePlaceIndex = placeIndex;
+  activeMediaIndex = 0;         
   renderModal();
   document.getElementById('modal-overlay').classList.add('open');
-  setActive(i);
+  setActive(placeIndex);
 }
 
 function renderModal() {
-  const p = places[activeIndex];
-  document.getElementById('modal-img').src = p.image;
-  document.getElementById('modal-badge').textContent = `Memory ${activeIndex + 1} of ${places.length}`;
-  document.getElementById('modal-loc-text').textContent = p.location;
-  document.getElementById('modal-title').textContent = p.name;
-  document.getElementById('modal-date').textContent = p.date;
-  document.getElementById('modal-note').textContent = `"${p.note}"`;
-  document.getElementById('modal-counter').textContent = `${activeIndex + 1} / ${places.length}`;
-  document.getElementById('nav-prev').disabled = activeIndex === 0;
-  document.getElementById('nav-next').disabled = activeIndex === places.length - 1;
+  const place  = places[activePlaceIndex];
+  const media  = place.media;
+  const item   = media[activeMediaIndex];
+  const total  = media.length;
+
+  const container = document.getElementById('media-container');
+  container.innerHTML = '';   
+
+  if (item.type === 'video') {
+    const vid = document.createElement('video');
+    vid.src      = item.src;
+    vid.controls = true;
+    vid.autoplay = true;
+    vid.muted    = false;
+    vid.loop     = false;
+    vid.setAttribute('playsinline', '');
+    container.appendChild(vid);
+  } else {
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = place.name;
+    container.appendChild(img);
+  }
+
+  const typeLabel = item.type === 'video' ? 'Video' : 'Photo';
+  document.getElementById('modal-badge').textContent =
+    total > 1
+      ? `${typeLabel} ${activeMediaIndex + 1} of ${total}`
+      : place.name;
+
+  document.getElementById('modal-loc-text').textContent = place.location;
+  document.getElementById('modal-title').textContent    = place.name;
+  document.getElementById('modal-date').textContent     = place.date;
+  document.getElementById('modal-note').textContent     = place.note ? `"${place.note}"` : '';
+
+  document.getElementById('modal-counter').textContent =
+    total > 1 ? `${activeMediaIndex + 1} / ${total}` : '';
+
+  document.getElementById('nav-prev').disabled = activeMediaIndex === 0;
+  document.getElementById('nav-next').disabled = activeMediaIndex === total - 1;
 }
 
-function navigateModal(dir) {
-  const n = activeIndex + dir;
-  if (n < 0 || n >= places.length) return;
-  activeIndex = n;
+function navigateMedia(dir) {
+  const total = places[activePlaceIndex].media.length;
+  const next  = activeMediaIndex + dir;
+  if (next < 0 || next >= total) return;
+  activeMediaIndex = next;
   renderModal();
-  setActive(n);
-  map.setView([places[n].lat, places[n].lng], 7, { animate: true });
 }
 
 function closeModal() {
+  const vid = document.querySelector('#media-container video');
+  if (vid) vid.pause();
   document.getElementById('modal-overlay').classList.remove('open');
 }
 
@@ -120,6 +153,6 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape')     closeModal();
-  if (e.key === 'ArrowLeft')  navigateModal(-1);
-  if (e.key === 'ArrowRight') navigateModal(1);
+  if (e.key === 'ArrowLeft')  navigateMedia(-1);
+  if (e.key === 'ArrowRight') navigateMedia(1);
 });
